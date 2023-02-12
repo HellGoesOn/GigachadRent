@@ -371,6 +371,7 @@
             this.button10.TabIndex = 14;
             this.button10.Text = "Изменить";
             this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // button11
             // 
@@ -456,6 +457,7 @@
             this.button3.TabIndex = 18;
             this.button3.Text = "Добавить";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label4
             // 

@@ -19,7 +19,7 @@ namespace GigachadRent
 
         private static void UpdateLists()
         {
-            var cmd1 = $@"select * from Workers";
+            var cmd1 = $@"select * from Workers where WorkId = '1'";
             var reader = Globals.Read(cmd1);
             Worker.List.Clear();
             while (reader.Read()) {
@@ -97,6 +97,16 @@ namespace GigachadRent
         private void button3_Click(object sender, EventArgs e)
         {
             new EquipmentForm().Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            new WorkerForm().Show();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            new SupplyForm().Show();
         }
     }
 }

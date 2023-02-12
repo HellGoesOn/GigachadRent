@@ -99,6 +99,12 @@ namespace GigachadRent
 
             selectedContractId = Convert.ToInt32(contractsGrid.Rows[row].Cells[0].Value);
             LoadContractData();
+
+            dateTimePicker1.Value = DateTime.Parse(contractsGrid.Rows[row].Cells[1].Value.ToString());
+            dateTimePicker2.Value = DateTime.Parse(contractsGrid.Rows[row].Cells[2].Value.ToString());
+            textBox1.Text = contractsGrid.Rows[row].Cells[3].Value.ToString();
+            textBox2.Text = contractsGrid.Rows[row].Cells[4].Value.ToString();
+            comboBox3.SelectedValue = (int)contractsGrid.Rows[row].Cells[5].Value;
         }
 
         private void workerDealGrid_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -133,7 +139,15 @@ namespace GigachadRent
 
         private void button7_Click(object sender, EventArgs e)
         {
-
+            try {
+                var cmd = @$"update workerdeals set workerid = '{comboBox1.SelectedValue}' where WorkerDeals.Id = {selectedWorkerDealId} ";
+                Globals.Execute(cmd);
+                Globals.Log($"{Globals.UserName} обновил договор {selectedContractId} с клиентом {(comboBox3.SelectedItem as Client).Name}");
+                LoadContractData();
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void button9_Click(object sender, EventArgs e)
@@ -177,17 +191,14 @@ namespace GigachadRent
         private void button1_Click(object sender, EventArgs e)
         {
             try {
-                var cmd = @$"insert into contracts(datestart, dateend, price, penalty, clientid) 
-                           values ('{dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}', 
-                            '{dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}', 
-                            '{textBox1.Text}', 
-                            '{textBox2.Text}',
-                            '{(comboBox3.SelectedItem as Client).Id}')";
+                var cmd = @$"update contracts set datestart = '{dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}',
+                            dateend = '{dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}',
+                            price = '{textBox1.Text}', penalty = '{textBox2.Text}', clientid = '{(comboBox3.SelectedItem as Client).Id}' where Contracts.Id = {selectedContractId} ";
                 Globals.Execute(cmd);
-                Globals.Log($"{Globals.UserName} заключил новый договор с клиентом {(comboBox3.SelectedItem as Client).Name}");
+                Globals.Log($"{Globals.UserName} обновил договор {selectedContractId} с клиентом {(comboBox3.SelectedItem as Client).Name}");
                 LoadData();
             }
-            catch(Exception ex) {
+            catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
         }
@@ -198,6 +209,37 @@ namespace GigachadRent
                 Globals.Execute($"DELETE FROM Contracts WHERE Id = '{selectedContractId}'");
                 Globals.Log($"{Globals.UserName} расторг договор {selectedContractId}");
                 LoadData();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try {
+                var cmd = @$"insert into contracts(datestart, dateend, price, penalty, clientid) 
+                           values ('{dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}', 
+                            '{dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}', 
+                            '{textBox1.Text}', 
+                            '{textBox2.Text}',
+                            '{(comboBox3.SelectedItem as Client).Id}')";
+                Globals.Execute(cmd);
+                Globals.Log($"{Globals.UserName} заключил новый договор с клиентом {(comboBox3.SelectedItem as Client).Name}");
+                LoadData();
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            try {
+                var cmd = @$"update equipdeals set equipid = '{comboBox2.SelectedValue}' where equipdeals.Id = {selectedEquipDealId} ";
+                Globals.Execute(cmd);
+                Globals.Log($"{Globals.UserName} обновил договор {selectedContractId} с клиентом {(comboBox3.SelectedItem as Client).Name}");
+                LoadContractData();
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
         }
     }
