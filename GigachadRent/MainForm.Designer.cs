@@ -58,7 +58,7 @@ namespace GigachadRent
             this.button2.TabIndex = 1;
             this.button2.Text = "Договора";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.showContracts);
             // 
             // button3
             // 
@@ -69,7 +69,7 @@ namespace GigachadRent
             this.button3.TabIndex = 2;
             this.button3.Text = "Техника";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.showEquipment);
             // 
             // button4
             // 
@@ -80,7 +80,7 @@ namespace GigachadRent
             this.button4.TabIndex = 3;
             this.button4.Text = "Работники (спецтехника)";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.showWorkers);
             // 
             // button5
             // 
@@ -91,7 +91,7 @@ namespace GigachadRent
             this.button5.TabIndex = 4;
             this.button5.Text = "Работники (снабжение)";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.showSupply);
             // 
             // button6
             // 

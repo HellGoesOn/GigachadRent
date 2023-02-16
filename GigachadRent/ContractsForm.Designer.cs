@@ -319,7 +319,7 @@
             this.button7.TabIndex = 11;
             this.button7.Text = "Изменить";
             this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button7.Click += new System.EventHandler(this.updateWorkerDeal);
             // 
             // button8
             // 
@@ -329,7 +329,7 @@
             this.button8.TabIndex = 10;
             this.button8.Text = "Удалить";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.button8.Click += new System.EventHandler(this.deleteWorkerDeals);
             // 
             // button9
             // 
@@ -339,7 +339,7 @@
             this.button9.TabIndex = 9;
             this.button9.Text = "Добавить";
             this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.button9.Click += new System.EventHandler(this.addWorkerDeal);
             // 
             // tabPage2
             // 
@@ -371,7 +371,7 @@
             this.button10.TabIndex = 14;
             this.button10.Text = "Изменить";
             this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            this.button10.Click += new System.EventHandler(this.updateEquipDeals);
             // 
             // button11
             // 
@@ -381,7 +381,7 @@
             this.button11.TabIndex = 13;
             this.button11.Text = "Удалить";
             this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
+            this.button11.Click += new System.EventHandler(this.deleteEquipDeals);
             // 
             // button12
             // 
@@ -391,7 +391,7 @@
             this.button12.TabIndex = 12;
             this.button12.Text = "Добавить";
             this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
+            this.button12.Click += new System.EventHandler(this.addEquipDeals);
             // 
             // dateTimePicker1
             // 
@@ -437,7 +437,7 @@
             this.button1.TabIndex = 20;
             this.button1.Text = "Изменить";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.updateContract);
             // 
             // button2
             // 
@@ -447,7 +447,7 @@
             this.button2.TabIndex = 19;
             this.button2.Text = "Удалить";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.deleteContract);
             // 
             // button3
             // 
@@ -457,7 +457,7 @@
             this.button3.TabIndex = 18;
             this.button3.Text = "Добавить";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.createContract);
             // 
             // label4
             // 

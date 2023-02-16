@@ -11,19 +11,25 @@ namespace GigachadRent
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void login_btn(object sender, EventArgs e)
         {
-            if (Globals.Read($"select * from AppUsers where Login = '{textBox1.Text}' AND Password = '{textBox2.Text}'").Read()) {
-                this.Hide();
-                Globals.UserName = textBox1.Text;
-                new MainForm().Show();
-            } else {
-                Globals.CloseConnection();
-                MessageBox.Show("Пользователя не существует или введенны неверные данные авторизации", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            try {
+                if (Globals.Read($"select * from AppUsers where Login = '{textBox1.Text}' AND Password = '{textBox2.Text}'").Read()) {
+                    this.Hide();
+                    Globals.UserName = textBox1.Text;
+                    MessageBox.Show("Вы успешно авторизовались!", "Авторизация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    new MainForm().Show();
+                } else {
+                    Globals.CloseConnection();
+                    MessageBox.Show("Пользователя не существует или введенны неверные данные авторизации!", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch {
+                MessageBox.Show("Ошибка подключения к базе данных", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void reg_btn(object sender, EventArgs e)
         {
             new RegForm().Show(this);
         }

@@ -81,7 +81,7 @@ namespace GigachadRent
             new AuditLog().Show();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void showContracts(object sender, EventArgs e)
         {
             UpdateLists();
             var contracts = new ContractsForm();
@@ -94,17 +94,17 @@ namespace GigachadRent
 
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void showEquipment(object sender, EventArgs e)
         {
             new EquipmentForm().Show();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void showWorkers(object sender, EventArgs e)
         {
             new WorkerForm().Show();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void showSupply(object sender, EventArgs e)
         {
             new SupplyForm().Show();
         }

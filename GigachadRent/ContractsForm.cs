@@ -92,19 +92,22 @@ namespace GigachadRent
 
         private void contractsGrid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            var row = contractsGrid.SelectedCells[0].RowIndex;
+            try {
+                var row = contractsGrid.SelectedCells[0].RowIndex;
 
-            if (row < 0)
-                return;
+                if (row < 0)
+                    return;
 
-            selectedContractId = Convert.ToInt32(contractsGrid.Rows[row].Cells[0].Value);
-            LoadContractData();
+                selectedContractId = Convert.ToInt32(contractsGrid.Rows[row].Cells[0].Value);
+                LoadContractData();
 
-            dateTimePicker1.Value = DateTime.Parse(contractsGrid.Rows[row].Cells[1].Value.ToString());
-            dateTimePicker2.Value = DateTime.Parse(contractsGrid.Rows[row].Cells[2].Value.ToString());
-            textBox1.Text = contractsGrid.Rows[row].Cells[3].Value.ToString();
-            textBox2.Text = contractsGrid.Rows[row].Cells[4].Value.ToString();
-            comboBox3.SelectedValue = (int)contractsGrid.Rows[row].Cells[5].Value;
+                dateTimePicker1.Value = DateTime.Parse(contractsGrid.Rows[row].Cells[1].Value.ToString());
+                dateTimePicker2.Value = DateTime.Parse(contractsGrid.Rows[row].Cells[2].Value.ToString());
+                textBox1.Text = contractsGrid.Rows[row].Cells[3].Value.ToString();
+                textBox2.Text = contractsGrid.Rows[row].Cells[4].Value.ToString();
+                comboBox3.SelectedValue = (int)contractsGrid.Rows[row].Cells[5].Value;
+            }
+            catch { }
         }
 
         private void workerDealGrid_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -137,7 +140,7 @@ namespace GigachadRent
             tabControl1.SelectedIndex = 1;
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void updateWorkerDeal(object sender, EventArgs e)
         {
             try {
                 var cmd = @$"update workerdeals set workerid = '{comboBox1.SelectedValue}' where WorkerDeals.Id = {selectedWorkerDealId} ";
@@ -150,7 +153,7 @@ namespace GigachadRent
             }
         }
 
-        private void button9_Click(object sender, EventArgs e)
+        private void addWorkerDeal(object sender, EventArgs e)
         {
             var cmd = @$"insert into workerdeals(contractid, workerid) values ('{selectedContractId}', '{(comboBox1.SelectedItem as Worker).Id}')";
             Globals.Execute(cmd);
@@ -162,7 +165,7 @@ namespace GigachadRent
         {
         }
 
-        private void button8_Click(object sender, EventArgs e)
+        private void deleteWorkerDeals(object sender, EventArgs e)
         {
             if (MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Globals.Execute($"DELETE FROM WorkerDeals WHERE Id = '{selectedWorkerDealId}'");
@@ -171,7 +174,7 @@ namespace GigachadRent
             }
         }
 
-        private void button12_Click(object sender, EventArgs e)
+        private void addEquipDeals(object sender, EventArgs e)
         {
             var cmd = @$"insert into equipdeals(equipid, contractid) values ('{(comboBox2.SelectedItem as Equipment).Id}', '{selectedContractId}')";
             Globals.Execute(cmd);
@@ -179,7 +182,7 @@ namespace GigachadRent
             LoadContractData();
         }
 
-        private void button11_Click(object sender, EventArgs e)
+        private void deleteEquipDeals(object sender, EventArgs e)
         {
             if (MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Globals.Execute($"DELETE FROM EquipDeals WHERE Id = '{selectedEquipDealId}'");
@@ -188,7 +191,7 @@ namespace GigachadRent
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void updateContract(object sender, EventArgs e)
         {
             try {
                 var cmd = @$"update contracts set datestart = '{dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}',
@@ -203,7 +206,7 @@ namespace GigachadRent
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void deleteContract(object sender, EventArgs e)
         {
             if (MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Globals.Execute($"DELETE FROM Contracts WHERE Id = '{selectedContractId}'");
@@ -212,7 +215,7 @@ namespace GigachadRent
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void createContract(object sender, EventArgs e)
         {
             try {
                 var cmd = @$"insert into contracts(datestart, dateend, price, penalty, clientid) 
@@ -230,7 +233,7 @@ namespace GigachadRent
             }
         }
 
-        private void button10_Click(object sender, EventArgs e)
+        private void updateEquipDeals(object sender, EventArgs e)
         {
             try {
                 var cmd = @$"update equipdeals set equipid = '{comboBox2.SelectedValue}' where equipdeals.Id = {selectedEquipDealId} ";

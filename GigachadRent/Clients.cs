@@ -53,6 +53,7 @@ namespace GigachadRent
             Globals.Execute(cmd);
             Globals.Log($"{Globals.UserName} добавил клиента {textBox1.Text} в базу данных ");
             LoadData();
+            selectedId = 0;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -60,6 +61,9 @@ namespace GigachadRent
             if(MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Globals.Execute($"DELETE FROM Clients WHERE Id = '{selectedId}'");
                 Globals.Log($"{Globals.UserName} удалил клиента {textBox1.Text} из базы данных");
+                if (selectedId == 0) {
+                    MessageBox.Show("Не выбран ни один клиент для удаления!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 LoadData();
                 selectedId = 0;
             }
