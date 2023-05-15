@@ -43,6 +43,7 @@ namespace GigachadRent
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.clientBindingSource)).BeginInit();
@@ -61,6 +62,7 @@ namespace GigachadRent
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.maskedTextBox1);
             this.tabPage1.Controls.Add(this.label2);
@@ -163,6 +165,16 @@ namespace GigachadRent
             this.phone.HeaderText = "Номер телефона";
             this.phone.Name = "phone";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(7, 162);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(115, 23);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "Назад";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Clients
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -197,5 +209,6 @@ namespace GigachadRent
         private TextBox textBox1;
         private Button button1;
         private Button button2;
+        private Button button3;
     }
 }

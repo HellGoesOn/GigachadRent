@@ -51,5 +51,10 @@ namespace GigachadRent
             this.Close();
             MessageBox.Show("Регистрация завершена.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void RegForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

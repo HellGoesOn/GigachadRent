@@ -22,5 +22,15 @@ namespace GigachadRent
         {
             richTextBox1.Text = File.ReadAllText("log.txt");
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

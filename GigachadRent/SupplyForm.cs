@@ -20,7 +20,7 @@ namespace GigachadRent
             LoadData();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void supplyButton1_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text)) {
                 MessageBox.Show("Введенные данные нельзя добавить в таблицу", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -33,7 +33,7 @@ namespace GigachadRent
             LoadData();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void supplyButton2_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Globals.Execute($"DELETE FROM workers WHERE Id = '{selectedId}'");
@@ -71,6 +71,16 @@ namespace GigachadRent
         }
 
         private void grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void SupplyForm_Load(object sender, EventArgs e)
         {
 
         }

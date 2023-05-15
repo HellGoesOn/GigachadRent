@@ -54,6 +54,8 @@ namespace GigachadRent
             Globals.Log($"{Globals.UserName} добавил клиента {textBox1.Text} в базу данных ");
             LoadData();
             selectedId = 0;
+
+            MessageBox.Show($"Добавлен клиент {textBox1.Text}", "Данные добавлены", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -88,6 +90,11 @@ namespace GigachadRent
         private void Clients_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

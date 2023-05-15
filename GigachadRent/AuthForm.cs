@@ -24,14 +24,19 @@ namespace GigachadRent
                     MessageBox.Show("Пользователя не существует или введенны неверные данные авторизации!", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch {
-                MessageBox.Show("Ошибка подключения к базе данных", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            catch(Exception ee) {
+                MessageBox.Show($"Ошибка подключения к базе данных {ee}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void reg_btn(object sender, EventArgs e)
         {
             new RegForm().Show(this);
+        }
+
+        private void AuthForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
