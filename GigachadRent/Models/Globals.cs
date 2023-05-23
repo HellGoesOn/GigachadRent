@@ -82,5 +82,16 @@ namespace GigachadRent.Models
                 File.AppendAllText("log.txt", $"[Дата {DateTime.Now}] [Действие]: {text} {Environment.NewLine}");
             }
         }
+
+        public static object[] GetReaderResults(SqlDataReader reader, int columnCount)
+        {
+            object[] results = new object[columnCount];
+
+            for(int i = 0; i < columnCount; i++) {
+                results[i] = reader.IsDBNull(i) ? "" : reader.GetValue(i);
+            }
+
+            return results;
+        }
     }
 }

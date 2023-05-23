@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,11 +26,11 @@ namespace GigachadRent
             InitializeComponent();
 
             comboBox1.DataSource = Worker.List;
-            comboBox1.DisplayMember = "Name";
+            comboBox1.DisplayMember = "Composite";
             comboBox1.ValueMember = "Id";
 
             comboBox2.DataSource = Equipment.List;
-            comboBox2.DisplayMember = "Name";
+            comboBox2.DisplayMember = "Composite";
             comboBox2.ValueMember = "Id";
 
             DataGridViewComboBoxColumn dgvCMB = new DataGridViewComboBoxColumn();
@@ -58,7 +59,13 @@ namespace GigachadRent
 
         private void DtpStart_TextChanged(object sender, EventArgs e)
         {
+            if(contractsGrid.CurrentCell.ColumnIndex == 1)
             contractsGrid.CurrentCell.Value = dtpStart.Value.ToString();
+
+            dtpStart.Visible = false;
+            dtpStart.Location = new Point(0, 0);
+            dtpStart.Size = new Size(0, 0);
+            dtpStart.TextChanged -= DtpStart_TextChanged;
         }
 
         private void ContractsForm_Load(object sender, EventArgs e)
@@ -78,10 +85,14 @@ namespace GigachadRent
                     reader.GetDateTime(1),
                     reader.GetInt32(2),
                     reader.GetDecimal(3),
-                    reader.GetDecimal(4),
-                    reader.GetInt32(5));
+                    reader.GetInt32(4));
             }
             Globals.CloseConnection();
+            loaded = false;
+            for(int i = 0; i < contractsGrid.Rows.Count-1; i++) {
+                contractsGrid.Rows[i].Cells[3].Value = contractsGrid.Rows[i].Cells[3].Value.ToString().Replace(".", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
+            }
+            loaded = true;
         }
 
         public void LoadContractData()
@@ -118,16 +129,30 @@ namespace GigachadRent
         Rectangle _Rectangle;
         private void contractsGrid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0 || e.RowIndex == contractsGrid.Rows.Count-1)
+                return;
+
+            selectedContractId = (int)contractsGrid.Rows[e.RowIndex].Cells[0].Value;
+
+            LoadContractData();
+
             _Rectangle = contractsGrid.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
 
             if (e.ColumnIndex < 0)
                 return;
+
+            dtpStart.Visible = false;
+            dtpStart.Location = new Point(0, 0);
+            dtpStart.Size = new Size(0, 0);
+            dtpStart.Value = DateTime.Parse(contractsGrid.Rows[e.RowIndex].Cells["dateStart"].Value.ToString());
+            dtpStart.TextChanged -= DtpStart_TextChanged;
 
             switch (contractsGrid.Columns[e.ColumnIndex].Name) {
                 case "dateStart":
                     dtpStart.Size = new Size(_Rectangle.Width, _Rectangle.Height);
                     dtpStart.Location = new Point(_Rectangle.X, _Rectangle.Y);
                     dtpStart.Visible = true;
+                    dtpStart.TextChanged += DtpStart_TextChanged;
                     break;
             }
         }
@@ -167,7 +192,7 @@ namespace GigachadRent
             try {
                 var cmd = @$"update workerdeals set workerid = '{comboBox1.SelectedValue}' where WorkerDeals.Id = {selectedWorkerDealId} ";
                 Globals.Execute(cmd);
-                Globals.Log($"{Globals.UserName} обновил договор {selectedContractId} с клиентом {(comboBox3.SelectedItem as Client).Name}");
+                Globals.Log($"{Globals.UserName} обновил договор {selectedContractId}");
                 LoadContractData();
             }
             catch (Exception ex) {
@@ -200,8 +225,11 @@ namespace GigachadRent
         {
             var cmd = @$"insert into equipdeals(equipid, contractid) values ('{(comboBox2.SelectedItem as Equipment).Id}', '{selectedContractId}')";
             Globals.Execute(cmd);
+            var cmd2 = $@"update equipment set status = 'Арендовано' where id = {(comboBox2.SelectedItem as Equipment).Id}";
+            Globals.Execute(cmd2);
             Globals.Log($"{Globals.UserName} добавил технику {(comboBox2.SelectedItem as Equipment).Name} в договор {selectedContractId}");
             LoadContractData();
+            comboBox2.DataSource = Equipment.List;
         }
 
         private void deleteEquipDeals(object sender, EventArgs e)
@@ -209,7 +237,10 @@ namespace GigachadRent
             if (MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Globals.Execute($"DELETE FROM EquipDeals WHERE Id = '{selectedEquipDealId}'");
                 Globals.Log($"{Globals.UserName} удалил технику {(comboBox2.SelectedItem as Equipment).Name} из договора {selectedContractId}");
+                var cmd2 = $@"update equipment set status = 'Свободно' where id = {(comboBox2.SelectedItem as Equipment).Id}";
+                Globals.Execute(cmd2);
                 LoadContractData();
+                comboBox2.DataSource = Equipment.List;
             }
         }
 
@@ -237,30 +268,12 @@ namespace GigachadRent
             }
         }
 
-        private void createContract(object sender, EventArgs e)
-        {
-            try {
-                var cmd = @$"insert into contracts(datestart, dateend, price, penalty, clientid) 
-                           values ('{dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}', 
-                            '{dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}', 
-                            '{textBox1.Text}', 
-                            '{textBox2.Text}',
-                            '{(comboBox3.SelectedItem as Client).Id}')";
-                Globals.Execute(cmd);
-                Globals.Log($"{Globals.UserName} заключил новый договор с клиентом {(comboBox3.SelectedItem as Client).Name}");
-                LoadData();
-            }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         private void updateEquipDeals(object sender, EventArgs e)
         {
             try {
                 var cmd = @$"update equipdeals set equipid = '{comboBox2.SelectedValue}' where equipdeals.Id = {selectedEquipDealId} ";
                 Globals.Execute(cmd);
-                Globals.Log($"{Globals.UserName} обновил договор {selectedContractId} с клиентом {(comboBox3.SelectedItem as Client).Name}");
+                Globals.Log($"{Globals.UserName} обновил договор {selectedContractId}");
                 LoadContractData();
             }
             catch (Exception ex) {
@@ -282,12 +295,18 @@ namespace GigachadRent
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
             try {
-                for(int i = 0; i < contractsGrid.Rows.Count; i++) {
+                for(int i = 0; i < contractsGrid.Rows.Count - 1; i++) {
                     bool any = false;
                     bool textNotEmpty = string.IsNullOrWhiteSpace(textBox3.Text);
 
                     for(int j = 0; j < contractsGrid.Rows[i].Cells.Count; j++) {
-                        if (contractsGrid.Rows[i].Cells[j].Value.ToString().Contains(textBox3.Text)) {
+                        if(j == contractsGrid.Rows[i].Cells.Count-1) {
+                            if((contractsGrid.Rows[i].Cells[j] as DataGridViewComboBoxCell).FormattedValue.ToString().ToLower().Contains(textBox3.Text.ToLower())) {
+                                any = true;
+                                break;
+                            }
+                        }
+                        else if (contractsGrid.Rows[i].Cells[j].Value.ToString().ToLower().Contains(textBox3.Text.ToLower())) {
                             any = true;
                             break;
                         }
@@ -303,6 +322,9 @@ namespace GigachadRent
 
         private void contractsGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+                return;
+
             selectedContractId = (int)contractsGrid.Rows[e.RowIndex].Cells[0].Value;
 
             LoadContractData();
@@ -334,18 +356,15 @@ namespace GigachadRent
                 contractsGrid.Rows[rowInd].Cells[1].Value = DateTime.Today;
                 contractsGrid.Rows[rowInd].Cells[2].Value = 4;
                 contractsGrid.Rows[rowInd].Cells[3].Value = "0.00";
-                contractsGrid.Rows[rowInd].Cells[4].Value = "0.00";
-                contractsGrid.Rows[rowInd].Cells[5].Value = Client.List[0].Id;
+                contractsGrid.Rows[rowInd].Cells[4].Value = Client.List[0].Id;
                 string dateStart = Convert.ToDateTime(contractsGrid.Rows[rowInd].Cells[1].Value.ToString()).ToString("yyyy-MM-dd HH:mm:ss.fff");
                 string dateEnd = contractsGrid.Rows[rowInd].Cells[2].Value.ToString();
                 string price = contractsGrid.Rows[rowInd].Cells[3].Value.ToString();
-                string unstable = contractsGrid.Rows[rowInd].Cells[4].Value.ToString();
-                int client = (int)contractsGrid.Rows[rowInd].Cells[5].Value;
-                var cmd = @$"insert into contracts(datestart, dateend, price, penalty, clientid) 
+                int client = (int)contractsGrid.Rows[rowInd].Cells[4].Value;
+                var cmd = @$"insert into contracts(datestart, dateend, price, clientid) 
                            values ('{dateStart}', 
                             '{dateEnd}', 
                             '{price}', 
-                            '{unstable}',
                             '{client}')";
                 Globals.Execute(cmd);
                 Globals.Log($"{Globals.UserName} заключил новый договор с клиентом {Client.List.Find(x => x.Id == client).Name}");
@@ -386,6 +405,15 @@ namespace GigachadRent
                 }
             }
 
+            bool c3 = decimal.TryParse(contractsGrid.Rows[e.RowIndex].Cells[3].Value.ToString(), out var _);
+            if (e.ColumnIndex == 3 && !c3) {
+                MessageBox.Show("Введите число!", "Неверный тип данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                loaded = false;
+                contractsGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 0.0;
+                loaded = true;
+                return;
+            }
+
             try {
                 foreach (DataGridViewCell cell in contractsGrid.Rows[e.RowIndex].Cells) {
                     if (cell.ColumnIndex > 0 && cell.Value == null)
@@ -396,13 +424,12 @@ namespace GigachadRent
                 selectedContractId = (int)contractsGrid.Rows[e.RowIndex].Cells[0].Value;
                 string dateStart = Convert.ToDateTime(contractsGrid.Rows[rowInd].Cells[1].Value.ToString()).ToString("yyyy-MM-dd HH:mm:ss.fff");
                 string dateEnd = contractsGrid.Rows[rowInd].Cells[2].Value.ToString();
-                string price = contractsGrid.Rows[rowInd].Cells[3].Value.ToString();
-                string unstable = contractsGrid.Rows[rowInd].Cells[4].Value.ToString();
-                int client = (int)contractsGrid.Rows[rowInd].Cells[5].Value;
+                string price = contractsGrid.Rows[rowInd].Cells[3].Value.ToString().Replace(".", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
+                int client = (int)contractsGrid.Rows[rowInd].Cells[4].Value;
 
                 var cmd = @$"update contracts set datestart = '{dateStart}',
                             dateend = '{dateEnd}',
-                            price = '{price}', penalty = '{unstable}', clientid = '{client}' where Contracts.Id = {selectedContractId} ";
+                            price = '{price}', clientid = '{client}' where Contracts.Id = {selectedContractId} ";
                 Globals.Execute(cmd);
                 Globals.Log($"{Globals.UserName} обновил договор {selectedContractId} с клиентом {Client.List.Find(x => x.Id == client).Name}");
                 LoadData();

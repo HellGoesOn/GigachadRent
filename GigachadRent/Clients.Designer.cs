@@ -32,6 +32,8 @@ namespace GigachadRent
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -43,7 +45,6 @@ namespace GigachadRent
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button3 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.clientBindingSource)).BeginInit();
@@ -52,16 +53,18 @@ namespace GigachadRent
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Location = new System.Drawing.Point(13, 7);
+            this.tabControl1.Location = new System.Drawing.Point(0, 9);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(137, 333);
+            this.tabControl1.Size = new System.Drawing.Size(219, 333);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.maskedTextBox1);
@@ -73,14 +76,34 @@ namespace GigachadRent
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage1.Size = new System.Drawing.Size(129, 305);
+            this.tabPage1.Size = new System.Drawing.Size(211, 305);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Данные";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(46, 133);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(115, 23);
+            this.button4.TabIndex = 8;
+            this.button4.Text = "Изменить";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(46, 191);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(115, 23);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "Назад";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(7, 133);
+            this.button2.Location = new System.Drawing.Point(46, 162);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 23);
             this.button2.TabIndex = 6;
@@ -93,7 +116,7 @@ namespace GigachadRent
             this.maskedTextBox1.Location = new System.Drawing.Point(7, 75);
             this.maskedTextBox1.Mask = "+7-(999)-000-0000";
             this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(117, 23);
+            this.maskedTextBox1.Size = new System.Drawing.Size(197, 23);
             this.maskedTextBox1.TabIndex = 5;
             // 
             // label2
@@ -118,12 +141,12 @@ namespace GigachadRent
             // 
             this.textBox1.Location = new System.Drawing.Point(7, 31);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(117, 23);
+            this.textBox1.Size = new System.Drawing.Size(201, 23);
             this.textBox1.TabIndex = 1;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(7, 104);
+            this.button1.Location = new System.Drawing.Point(46, 104);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(117, 23);
             this.button1.TabIndex = 0;
@@ -134,15 +157,17 @@ namespace GigachadRent
             // clientsGrid
             // 
             this.clientsGrid.AllowUserToAddRows = false;
+            this.clientsGrid.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.clientsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.clientsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.clientsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
             this.name,
             this.phone});
-            this.clientsGrid.Location = new System.Drawing.Point(157, 31);
+            this.clientsGrid.Location = new System.Drawing.Point(226, 31);
             this.clientsGrid.Name = "clientsGrid";
             this.clientsGrid.RowTemplate.Height = 25;
-            this.clientsGrid.Size = new System.Drawing.Size(602, 305);
+            this.clientsGrid.Size = new System.Drawing.Size(672, 305);
             this.clientsGrid.TabIndex = 2;
             this.clientsGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.clientsGrid_CellClick);
             this.clientsGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
@@ -165,21 +190,11 @@ namespace GigachadRent
             this.phone.HeaderText = "Номер телефона";
             this.phone.Name = "phone";
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(7, 162);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(115, 23);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "Назад";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // Clients
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(773, 354);
+            this.ClientSize = new System.Drawing.Size(910, 354);
             this.Controls.Add(this.clientsGrid);
             this.Controls.Add(this.tabControl1);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -210,5 +225,6 @@ namespace GigachadRent
         private Button button1;
         private Button button2;
         private Button button3;
+        private Button button4;
     }
 }

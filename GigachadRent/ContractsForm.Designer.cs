@@ -32,7 +32,6 @@
             this.dateStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dateEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.penalty = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.workerDealGrid = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,13 +77,13 @@
             // 
             // contractsGrid
             // 
+            this.contractsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.contractsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.contractsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
             this.dateStart,
             this.dateEnd,
-            this.price,
-            this.penalty});
+            this.price});
             this.contractsGrid.Location = new System.Drawing.Point(12, 79);
             this.contractsGrid.Name = "contractsGrid";
             this.contractsGrid.RowTemplate.Height = 25;
@@ -114,30 +113,24 @@
             this.dateStart.FillWeight = 150F;
             this.dateStart.HeaderText = "Дата начала выполнения контракта";
             this.dateStart.Name = "dateStart";
-            this.dateStart.Width = 150;
             // 
             // dateEnd
             // 
             this.dateEnd.FillWeight = 150F;
             this.dateEnd.HeaderText = "Длительность контракта (в днях)";
             this.dateEnd.Name = "dateEnd";
-            this.dateEnd.Width = 150;
             // 
             // price
             // 
             this.price.HeaderText = "Стоимость";
             this.price.Name = "price";
             // 
-            // penalty
-            // 
-            this.penalty.HeaderText = "Неустойка";
-            this.penalty.Name = "penalty";
-            // 
             // workerDealGrid
             // 
             this.workerDealGrid.AllowUserToAddRows = false;
             this.workerDealGrid.AllowUserToDeleteRows = false;
             this.workerDealGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.workerDealGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.workerDealGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.workerDealGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
@@ -191,6 +184,7 @@
             this.equipDealGrid.AllowUserToAddRows = false;
             this.equipDealGrid.AllowUserToDeleteRows = false;
             this.equipDealGrid.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.equipDealGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.equipDealGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.equipDealGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn2,
@@ -298,13 +292,13 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(6, 6);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(264, 23);
+            this.comboBox1.Size = new System.Drawing.Size(349, 23);
             this.comboBox1.TabIndex = 12;
             this.comboBox1.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(276, 35);
+            this.button7.Location = new System.Drawing.Point(149, 64);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(77, 23);
             this.button7.TabIndex = 11;
@@ -314,7 +308,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(276, 64);
+            this.button8.Location = new System.Drawing.Point(149, 93);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(77, 23);
             this.button8.TabIndex = 10;
@@ -324,7 +318,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(276, 6);
+            this.button9.Location = new System.Drawing.Point(149, 35);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(76, 23);
             this.button9.TabIndex = 9;
@@ -351,12 +345,12 @@
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(6, 7);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(264, 23);
+            this.comboBox2.Size = new System.Drawing.Size(346, 23);
             this.comboBox2.TabIndex = 15;
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(276, 35);
+            this.button10.Location = new System.Drawing.Point(143, 64);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(77, 23);
             this.button10.TabIndex = 14;
@@ -366,7 +360,7 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(276, 64);
+            this.button11.Location = new System.Drawing.Point(143, 93);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(77, 23);
             this.button11.TabIndex = 13;
@@ -376,7 +370,7 @@
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(276, 6);
+            this.button12.Location = new System.Drawing.Point(143, 36);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(76, 23);
             this.button12.TabIndex = 12;
@@ -435,13 +429,13 @@
             // составитьОтчётToolStripMenuItem
             // 
             this.составитьОтчётToolStripMenuItem.Name = "составитьОтчётToolStripMenuItem";
-            this.составитьОтчётToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.составитьОтчётToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.составитьОтчётToolStripMenuItem.Text = "Составить отчёт";
             // 
             // выходToolStripMenuItem
             // 
             this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.выходToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.выходToolStripMenuItem.Text = "Выход";
             this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
             // 
@@ -540,6 +534,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dateStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn dateEnd;
         private System.Windows.Forms.DataGridViewTextBoxColumn price;
-        private System.Windows.Forms.DataGridViewTextBoxColumn penalty;
     }
 }

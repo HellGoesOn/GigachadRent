@@ -26,9 +26,10 @@ namespace GigachadRent
 
                 int workerId = reader.GetInt32(0);
                 string workerName = reader.GetString(1);
-                string workerSpecialty = reader.GetString(2);
+                string phone = reader.GetString(2);
+                string workerSpecialty = reader.GetString(3);
 
-                Worker.List.Add(new Worker() { Id = workerId, Name = workerName, Specialty = workerSpecialty });
+                Worker.List.Add(new Worker() { Id = workerId, Name = workerName, Phone = phone, Specialty = workerSpecialty });
             }
             Globals.CloseConnection();
 
@@ -40,8 +41,10 @@ namespace GigachadRent
                 int Id = reader2.GetInt32(0);
                 string Name = reader2.GetString(1);
                 string Model = reader2.GetString(2);
+                string parameters = reader2.IsDBNull(3) ? "" : reader2.GetString(3);
+                string status = reader2.IsDBNull(4) ? "" : reader2.GetString(4);
 
-                Equipment.List.Add(new Equipment() { Id = Id, Name = Name, Model = Model });
+                Equipment.List.Add(new Equipment() { Id = Id, Name = Name, Model = Model, Paramaters = parameters, Status = status });
             }
             Globals.CloseConnection();
 

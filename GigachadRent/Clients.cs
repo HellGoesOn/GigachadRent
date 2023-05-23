@@ -96,5 +96,16 @@ namespace GigachadRent
         {
             this.Close();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var cmd = @$"update Clients set name = '{textBox1.Text}', phone = '{maskedTextBox1.Text}' where Id = '{selectedId}'";
+            Globals.Execute(cmd);
+            Globals.Log($"{Globals.UserName} обновил данные клиента {textBox1.Text}");
+            LoadData();
+            selectedId = 0;
+
+            MessageBox.Show($"Обновлены данные для клиента {textBox1.Text}", "Данные добавлены", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

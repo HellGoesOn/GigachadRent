@@ -79,5 +79,46 @@ namespace GigachadRent
         {
             this.Close();
         }
+
+        private void WorkerForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text)) {
+                MessageBox.Show("Введенные данные нельзя добавить в таблицу", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var cmd = @$"update workers set name = '{textBox1.Text}', phone = '{maskedTextBox1.Text}', specialty = '{textBox2.Text}' where id = '{selectedId}'";
+            Globals.Execute(cmd);
+            Globals.Log($"{Globals.UserName} обновил рабочего {textBox1.Text}");
+            LoadData();
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+            try {
+                for (int i = 0; i < grid.Rows.Count; i++) {
+                    bool any = false;
+                    bool textNotEmpty = string.IsNullOrWhiteSpace(textBox3.Text);
+
+                    for (int j = 0; j < grid.Rows[i].Cells.Count; j++) {
+                        if (grid.Rows[i].Cells[j].Value.ToString().ToLower().Contains(textBox3.Text.ToLower())) {
+                            any = true;
+                            break;
+                        }
+                    }
+
+                    grid.Rows[i].Visible = any || textNotEmpty;
+                }
+            }
+            catch {
+
+            }
+        }
     }
 }
