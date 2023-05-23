@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -106,6 +107,14 @@ namespace GigachadRent
             selectedId = 0;
 
             MessageBox.Show($"Обновлены данные для клиента {textBox1.Text}", "Данные добавлены", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (Regex.IsMatch(textBox1.Text, @"[\d-]")) {
+                MessageBox.Show("Нельзя ввести число в это поле!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                textBox1.Text = Regex.Replace(textBox1.Text, @"[\d-]", string.Empty);
+            }
         }
     }
 }
