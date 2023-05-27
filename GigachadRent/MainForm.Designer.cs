@@ -36,6 +36,7 @@ namespace GigachadRent
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -101,7 +102,7 @@ namespace GigachadRent
             // button6
             // 
             this.button6.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button6.Location = new System.Drawing.Point(153, 241);
+            this.button6.Location = new System.Drawing.Point(153, 270);
             this.button6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(243, 23);
@@ -122,11 +123,23 @@ namespace GigachadRent
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.showLogs);
             // 
+            // button8
+            // 
+            this.button8.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button8.Location = new System.Drawing.Point(153, 241);
+            this.button8.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(243, 23);
+            this.button8.TabIndex = 7;
+            this.button8.Text = "Справка";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(552, 366);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
@@ -153,5 +166,6 @@ namespace GigachadRent
         private Button button5;
         private Button button6;
         private Button button7;
+        private Button button8;
     }
 }

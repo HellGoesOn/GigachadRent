@@ -13,8 +13,10 @@ namespace GigachadRent
         static void Main()
         {
             if(File.Exists("cfg.txt")) {
-                string s = File.ReadAllText("cfg.txt");
-                Models.Globals.SetServer(s);
+                string[] s = File.ReadAllText("cfg.txt").Split(Environment.NewLine);
+                Models.Globals.SetServer(s[0].Replace(Environment.NewLine, ""));
+                Models.Globals.BackupPath = s[1].Replace(Environment.NewLine, "");
+
             }
             else {
                 File.Create("cfg.txt").Close();

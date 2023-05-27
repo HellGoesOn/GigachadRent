@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Windows.Forms;
 
 namespace GigachadRent.Models
 {
@@ -9,12 +10,15 @@ namespace GigachadRent.Models
     {
         public static string UserName { get; set; }
         public static string Password { get; set; }
+        public static string BackupPath { get; set; } = "";
+        public static string Server { get; set; }
 
         public static void SetServer(string servName)
         {
             try {
                 CloseConnection();
                 ConnectionString = $"Data Source={servName};Initial Catalog=GigachadRent;Integrated Security=True";
+                Server = servName;
                 OpenConnection();
             }
             catch {
@@ -41,7 +45,7 @@ namespace GigachadRent.Models
 
         public static void CloseConnection()
         {
-            if (Connection != null && Connection.State == ConnectionState.Open)
+            if (Connection != null)
                 Connection.Close();
         }
         public static void Execute(string commandText, bool quiet = true)
@@ -51,14 +55,33 @@ namespace GigachadRent.Models
                 SqlCommand command = new SqlCommand(commandText) {
                     Connection = connection
                 };
+
+                var normalized = command.CommandText.ToLower();
+
+                var backupName = "";
+                if (normalized.Contains("insert") || normalized.Contains("update")) {
+
+                    if(!Directory.Exists(BackupPath)) {
+                        Directory.CreateDirectory(BackupPath);
+                    }
+
+                    backupName = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
+                    var backup = $"backup database GigachadRent to DISK = '{BackupPath}\\{backupName}.bak'";
+                    var cmd = new SqlCommand(backup) {
+                        Connection = connection
+                    };
+                    cmd.ExecuteNonQuery();
+
+                    Log($"{UserName} выполнил команду {commandText}", backupName);
+                }
                 command.ExecuteNonQuery();
                 connection.Close();
 
                 if (!quiet)
                     Log($"{UserName} выполнил команду {commandText}");
             }
-            catch {
-
+            catch(Exception ee) {
+                Console.WriteLine(ee.Message);
             }
         }
 
@@ -74,12 +97,12 @@ namespace GigachadRent.Models
             return reader;
         }
 
-        public static void Log(string text)
+        public static void Log(string text, string backup = "")
         {
             if (!File.Exists("log.txt")) {
-                File.WriteAllText("log.txt", $"[Дата {DateTime.Now}] [Действие]:  {text} {Environment.NewLine}");
+                File.WriteAllText("log.txt", $"[Дата {DateTime.Now}] [Действие]:  {text} {(backup != "" ? $"[{backup}.bak]" : "")}{Environment.NewLine}");
             } else {
-                File.AppendAllText("log.txt", $"[Дата {DateTime.Now}] [Действие]: {text} {Environment.NewLine}");
+                File.AppendAllText("log.txt", $"[Дата {DateTime.Now}] [Действие]: {text} {(backup != "" ? $"[{backup}.bak]" : "" )}{Environment.NewLine}");
             }
         }
 

@@ -81,6 +81,7 @@ namespace GigachadRent
 
         private void showLogs(object sender, EventArgs e)
         {
+            Globals.CloseConnection();
             new AuditLog().Show();
         }
 

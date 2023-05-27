@@ -20,7 +20,6 @@ namespace GigachadRent
         bool loaded;
 
         DateTimePicker dtpStart = new DateTimePicker();
-        DateTimePicker dtpEnd = new DateTimePicker();
         public ContractsForm()
         {
             InitializeComponent();
