@@ -68,5 +68,36 @@ namespace GigachadRent
                 }
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string pattern = $"(?<=\\[)(.*?)(?=\\.bak\\])";
+            string match = Regex.Match(richTextBox1.Text, pattern, RegexOptions.Singleline | RegexOptions.RightToLeft).Value;
+            var backUpCommnad = $@"RESTORE DATABASE GigachadRent FROM DISK='{Globals.BackupPath}{match}.bak'";
+            if (!string.IsNullOrEmpty(match)) {
+                var diagResult =
+                MessageBox.Show("Вы хотите восстановить последнюю резервную копию?", "Предупреждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (diagResult == DialogResult.OK) {
+
+                    using (SqlConnection conn = new SqlConnection(Globals.ConnectionString)) {
+                        var useMaster = "USE Master";
+                        conn.Open();
+                        SqlCommand umc = new SqlCommand(useMaster, conn);
+                        umc.ExecuteNonQuery();
+
+                        var alter1 = @"ALTER DATABASE GigachadRent Set Single_User with rollback immediate";
+                        new SqlCommand(alter1, conn).ExecuteNonQuery();
+
+                        new SqlCommand(backUpCommnad, conn).ExecuteNonQuery();
+
+                        var alter2 = @"ALTER DATABASE GigachadRent Set Multi_User";
+                        new SqlCommand(alter2, conn).ExecuteNonQuery();
+
+                        MessageBox.Show("Восстановление завершено");
+                        conn.Close();
+                    }
+                }
+            }
+        }
     }
 }

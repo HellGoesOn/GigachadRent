@@ -59,7 +59,7 @@ namespace GigachadRent.Models
                 var normalized = command.CommandText.ToLower();
 
                 var backupName = "";
-                if (normalized.Contains("insert") || normalized.Contains("update")) {
+                if (normalized.Contains("insert") || normalized.Contains("update") || normalized.Contains("delete")) {
 
                     if(!Directory.Exists(BackupPath)) {
                         Directory.CreateDirectory(BackupPath);
@@ -115,6 +115,34 @@ namespace GigachadRent.Models
             }
 
             return results;
+        }
+
+        public static bool[] FilterDGV(DataGridView dgv, Func<string, bool> filterCondition, int column = -1)
+        {
+            try {
+                bool[] output = new bool[dgv.Rows.Count - 1];
+                for (int i = 0; i < dgv.Rows.Count - 1; i++) {
+                    bool any = false;
+
+                    if (column == -1) {
+                        for (int j = 0; j < dgv.Rows[i].Cells.Count; j++) {
+                            if (filterCondition(dgv.Rows[i].Cells[j].Value.ToString().ToLower())) {
+                                any = true;
+                                break;
+                            }
+                        }
+                    } else if (filterCondition(dgv.Rows[i].Cells[column].Value.ToString().ToLower())) {
+                        any = true;
+                    }
+
+                    output[i] = dgv.Rows[i].Visible = any;
+                }
+
+                return output;
+            }
+            catch {
+                return null;
+            }
         }
     }
 }

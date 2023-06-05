@@ -45,7 +45,8 @@ namespace GigachadRent
                 MessageBox.Show("Пользователь с таким логином уже существует!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            cmd = @$"insert into appusers(login, password) values ('{textBox1.Text}', '{textBox2.Text}')";
+            cmd = @$"declare @afterhash varbinary(500) = HASHBYTES('SHA2_512', '{textBox2.Text}')
+insert into appusers(login, password) values ('{textBox1.Text}', @afterhash)";
             Globals.Execute(cmd);
             Globals.Log($"Зарегистрирован новый пользователь: {textBox1.Text}");
             this.Close();

@@ -42,10 +42,10 @@ namespace GigachadRent
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button1.Location = new System.Drawing.Point(153, 67);
+            this.button1.Location = new System.Drawing.Point(187, 88);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(243, 25);
+            this.button1.Size = new System.Drawing.Size(187, 25);
             this.button1.TabIndex = 0;
             this.button1.Text = "Клиенты";
             this.button1.UseVisualStyleBackColor = true;
@@ -54,22 +54,22 @@ namespace GigachadRent
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button2.Location = new System.Drawing.Point(153, 96);
+            this.button2.Location = new System.Drawing.Point(187, 113);
             this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(243, 23);
+            this.button2.Size = new System.Drawing.Size(187, 25);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Договора";
+            this.button2.Text = "Договоры";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.showContracts);
             // 
             // button3
             // 
             this.button3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button3.Location = new System.Drawing.Point(153, 125);
+            this.button3.Location = new System.Drawing.Point(187, 138);
             this.button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(243, 23);
+            this.button3.Size = new System.Drawing.Size(187, 25);
             this.button3.TabIndex = 2;
             this.button3.Text = "Техника";
             this.button3.UseVisualStyleBackColor = true;
@@ -78,10 +78,10 @@ namespace GigachadRent
             // button4
             // 
             this.button4.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button4.Location = new System.Drawing.Point(153, 153);
+            this.button4.Location = new System.Drawing.Point(187, 163);
             this.button4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(243, 23);
+            this.button4.Size = new System.Drawing.Size(187, 25);
             this.button4.TabIndex = 3;
             this.button4.Text = "Работники (спецтехника)";
             this.button4.UseVisualStyleBackColor = true;
@@ -90,10 +90,10 @@ namespace GigachadRent
             // button5
             // 
             this.button5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button5.Location = new System.Drawing.Point(153, 183);
+            this.button5.Location = new System.Drawing.Point(187, 188);
             this.button5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(243, 23);
+            this.button5.Size = new System.Drawing.Size(187, 25);
             this.button5.TabIndex = 4;
             this.button5.Text = "Работники (снабжение)";
             this.button5.UseVisualStyleBackColor = true;
@@ -102,10 +102,10 @@ namespace GigachadRent
             // button6
             // 
             this.button6.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button6.Location = new System.Drawing.Point(153, 270);
+            this.button6.Location = new System.Drawing.Point(187, 213);
             this.button6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(243, 23);
+            this.button6.Size = new System.Drawing.Size(187, 25);
             this.button6.TabIndex = 5;
             this.button6.Text = "Выход";
             this.button6.UseVisualStyleBackColor = true;
@@ -114,25 +114,26 @@ namespace GigachadRent
             // button7
             // 
             this.button7.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button7.Location = new System.Drawing.Point(153, 212);
+            this.button7.Location = new System.Drawing.Point(187, 238);
             this.button7.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(243, 23);
+            this.button7.Size = new System.Drawing.Size(187, 25);
             this.button7.TabIndex = 6;
-            this.button7.Text = "Журнал аудита";
+            this.button7.Text = "Контроль состояния данных";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.showLogs);
             // 
             // button8
             // 
             this.button8.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button8.Location = new System.Drawing.Point(153, 241);
+            this.button8.Location = new System.Drawing.Point(187, 263);
             this.button8.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(243, 23);
+            this.button8.Size = new System.Drawing.Size(187, 25);
             this.button8.TabIndex = 7;
             this.button8.Text = "Справка";
             this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // MainForm
             // 
@@ -153,6 +154,7 @@ namespace GigachadRent
             this.Text = "Главная форма";
             this.Deactivate += new System.EventHandler(this.MainForm_Deactivate);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.ResumeLayout(false);
 
         }

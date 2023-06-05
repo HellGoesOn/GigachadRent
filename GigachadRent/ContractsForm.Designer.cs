@@ -64,8 +64,16 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.составитьОтчётToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.актОЗавершенииРаботToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.оформитьДоговорОбАрендеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterByLength = new System.Windows.Forms.CheckBox();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.comboBox5 = new System.Windows.Forms.ComboBox();
+            this.filterByPrice = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.contractsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.workerDealGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.equipDealGrid)).BeginInit();
@@ -87,7 +95,7 @@
             this.contractsGrid.Location = new System.Drawing.Point(12, 79);
             this.contractsGrid.Name = "contractsGrid";
             this.contractsGrid.RowTemplate.Height = 25;
-            this.contractsGrid.Size = new System.Drawing.Size(576, 430);
+            this.contractsGrid.Size = new System.Drawing.Size(576, 342);
             this.contractsGrid.TabIndex = 0;
             this.contractsGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.contractsGrid_CellClick);
             this.contractsGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.contractsGrid_CellContentClick);
@@ -236,7 +244,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 56);
+            this.label1.Location = new System.Drawing.Point(12, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 15);
             this.label1.TabIndex = 3;
@@ -391,17 +399,17 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(127, 56);
+            this.label9.Location = new System.Drawing.Point(12, 56);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(74, 15);
+            this.label9.Size = new System.Drawing.Size(42, 15);
             this.label9.TabIndex = 27;
-            this.label9.Text = "Фильтрация";
+            this.label9.Text = "Поиск";
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(207, 53);
+            this.textBox3.Location = new System.Drawing.Point(60, 53);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(381, 23);
+            this.textBox3.Size = new System.Drawing.Size(528, 23);
             this.textBox3.TabIndex = 28;
             this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
@@ -428,9 +436,27 @@
             // 
             // составитьОтчётToolStripMenuItem
             // 
+            this.составитьОтчётToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.актОЗавершенииРаботToolStripMenuItem,
+            this.оформитьДоговорОбАрендеToolStripMenuItem});
             this.составитьОтчётToolStripMenuItem.Name = "составитьОтчётToolStripMenuItem";
             this.составитьОтчётToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.составитьОтчётToolStripMenuItem.Text = "Составить отчёт";
+            this.составитьОтчётToolStripMenuItem.Click += new System.EventHandler(this.составитьОтчётToolStripMenuItem_Click);
+            // 
+            // актОЗавершенииРаботToolStripMenuItem
+            // 
+            this.актОЗавершенииРаботToolStripMenuItem.Name = "актОЗавершенииРаботToolStripMenuItem";
+            this.актОЗавершенииРаботToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.актОЗавершенииРаботToolStripMenuItem.Text = "Акт о завершении работ";
+            this.актОЗавершенииРаботToolStripMenuItem.Click += new System.EventHandler(this.актОЗавершенииРаботToolStripMenuItem_Click);
+            // 
+            // оформитьДоговорОбАрендеToolStripMenuItem
+            // 
+            this.оформитьДоговорОбАрендеToolStripMenuItem.Name = "оформитьДоговорОбАрендеToolStripMenuItem";
+            this.оформитьДоговорОбАрендеToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.оформитьДоговорОбАрендеToolStripMenuItem.Text = "Оформить договор об аренде";
+            this.оформитьДоговорОбАрендеToolStripMenuItem.Click += new System.EventHandler(this.оформитьДоговорОбАрендеToolStripMenuItem_Click);
             // 
             // выходToolStripMenuItem
             // 
@@ -444,12 +470,84 @@
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(65, 20);
             this.toolStripMenuItem2.Text = "Справка";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // filterByLength
+            // 
+            this.filterByLength.AutoSize = true;
+            this.filterByLength.Location = new System.Drawing.Point(12, 431);
+            this.filterByLength.Name = "filterByLength";
+            this.filterByLength.Size = new System.Drawing.Size(193, 19);
+            this.filterByLength.TabIndex = 30;
+            this.filterByLength.Text = "Фильтровать по длительности";
+            this.filterByLength.UseVisualStyleBackColor = true;
+            this.filterByLength.CheckedChanged += new System.EventHandler(this.filterByLength_CheckedChanged);
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "Больше",
+            "Меньше",
+            "Равно"});
+            this.comboBox4.Location = new System.Drawing.Point(12, 457);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(75, 23);
+            this.comboBox4.TabIndex = 31;
+            this.comboBox4.Text = "Больше";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(93, 457);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(112, 23);
+            this.textBox4.TabIndex = 32;
+            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(292, 457);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(112, 23);
+            this.textBox5.TabIndex = 35;
+            this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
+            // 
+            // comboBox5
+            // 
+            this.comboBox5.FormattingEnabled = true;
+            this.comboBox5.Items.AddRange(new object[] {
+            "Больше",
+            "Меньше",
+            "Равно"});
+            this.comboBox5.Location = new System.Drawing.Point(211, 457);
+            this.comboBox5.Name = "comboBox5";
+            this.comboBox5.Size = new System.Drawing.Size(75, 23);
+            this.comboBox5.TabIndex = 34;
+            this.comboBox5.Text = "Больше";
+            this.comboBox5.SelectedIndexChanged += new System.EventHandler(this.comboBox5_SelectedIndexChanged);
+            // 
+            // filterByPrice
+            // 
+            this.filterByPrice.AutoSize = true;
+            this.filterByPrice.Location = new System.Drawing.Point(211, 431);
+            this.filterByPrice.Name = "filterByPrice";
+            this.filterByPrice.Size = new System.Drawing.Size(176, 19);
+            this.filterByPrice.TabIndex = 33;
+            this.filterByPrice.Text = "Фильтровать по стоимости";
+            this.filterByPrice.UseVisualStyleBackColor = true;
+            this.filterByPrice.CheckedChanged += new System.EventHandler(this.filterByPrice_CheckedChanged);
             // 
             // ContractsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(963, 521);
+            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.comboBox5);
+            this.Controls.Add(this.filterByPrice);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.comboBox4);
+            this.Controls.Add(this.filterByLength);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.button4);
@@ -464,7 +562,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ContractsForm";
-            this.Text = "Договора";
+            this.Text = "Договоры";
             this.Load += new System.EventHandler(this.ContractsForm_Load);
             this.Resize += new System.EventHandler(this.ContractsForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.contractsGrid)).EndInit();
@@ -534,5 +632,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dateStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn dateEnd;
         private System.Windows.Forms.DataGridViewTextBoxColumn price;
+        private System.Windows.Forms.ToolStripMenuItem актОЗавершенииРаботToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem оформитьДоговорОбАрендеToolStripMenuItem;
+        private System.Windows.Forms.CheckBox filterByLength;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.ComboBox comboBox5;
+        private System.Windows.Forms.CheckBox filterByPrice;
     }
 }

@@ -35,22 +35,24 @@ namespace GigachadRent
             clientsGrid.Rows.Clear();
             var reader = Globals.Read($"Select * from clients");
             while(reader.Read()) {
+                var res = Globals.GetReaderResults(reader, 4);
                 this.clientsGrid.Rows.Add(
-                    reader.GetInt32(0),
-                    reader.GetString(1),
-                    reader.GetString(2));
+                    res[0],
+                    res[1].ToString(),
+                    res[2].ToString(),
+                    res[3].ToString());
             }
             Globals.CloseConnection();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(maskedTextBox1.Text)) {
-                MessageBox.Show("Введенные данные нельзя добавить в таблицу", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if(string.IsNullOrWhiteSpace(textBox1.Text) || !maskedTextBox1.MaskCompleted || string.IsNullOrWhiteSpace(textBox2.Text)) {
+                MessageBox.Show("Не заполнены обязательные поля!", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            var cmd = @$"insert into clients(name, phone) values ('{textBox1.Text}', '{maskedTextBox1.Text}')";
+            var cmd = @$"insert into clients(name, phone, email) values ('{textBox1.Text}', '{maskedTextBox1.Text}', '{textBox2.Text}')";
             Globals.Execute(cmd);
             Globals.Log($"{Globals.UserName} добавил клиента {textBox1.Text} в базу данных ");
             LoadData();
@@ -86,6 +88,7 @@ namespace GigachadRent
             selectedId = Convert.ToInt32(clientsGrid.Rows[row].Cells[0].Value);
             textBox1.Text = clientsGrid.Rows[row].Cells[1].Value.ToString();
             maskedTextBox1.Text = clientsGrid.Rows[row].Cells[2].Value.ToString();
+            textBox2.Text = clientsGrid.Rows[row].Cells[3].Value.ToString();
         }
 
         private void Clients_Load(object sender, EventArgs e)
@@ -100,7 +103,12 @@ namespace GigachadRent
 
         private void button4_Click(object sender, EventArgs e)
         {
-            var cmd = @$"update Clients set name = '{textBox1.Text}', phone = '{maskedTextBox1.Text}' where Id = '{selectedId}'";
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || !maskedTextBox1.MaskCompleted || string.IsNullOrWhiteSpace(textBox2.Text)) {
+                MessageBox.Show("Не заполнены обязательные поля!", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var cmd = @$"update Clients set name = '{textBox1.Text}', phone = '{maskedTextBox1.Text}', email = '{textBox2.Text}' where Id = '{selectedId}'";
             Globals.Execute(cmd);
             Globals.Log($"{Globals.UserName} обновил данные клиента {textBox1.Text}");
             LoadData();
@@ -114,6 +122,33 @@ namespace GigachadRent
             if (Regex.IsMatch(textBox1.Text, @"[\d-]")) {
                 MessageBox.Show("Нельзя ввести число в это поле!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 textBox1.Text = Regex.Replace(textBox1.Text, @"[\d-]", string.Empty);
+            }
+        }
+
+        private void справкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new HelpForm().Show();
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            try {
+                for (int i = 0; i < clientsGrid.Rows.Count; i++) {
+                    bool any = false;
+                    bool textNotEmpty = string.IsNullOrWhiteSpace(textBox3.Text);
+
+                    for (int j = 0; j < clientsGrid.Rows[i].Cells.Count; j++) {
+                        if (clientsGrid.Rows[i].Cells[j].Value.ToString().ToLower().Contains(textBox3.Text.ToLower())) {
+                            any = true;
+                            break;
+                        }
+                    }
+
+                    clientsGrid.Rows[i].Visible = any || textNotEmpty;
+                }
+            }
+            catch {
+
             }
         }
     }

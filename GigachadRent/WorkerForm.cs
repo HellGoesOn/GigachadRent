@@ -23,10 +23,11 @@ namespace GigachadRent
 
         private void workerButton1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text)) {
-                MessageBox.Show("Введенные данные нельзя добавить в таблицу", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || !maskedTextBox1.MaskCompleted) {
+                MessageBox.Show("Заполните все поля!", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
 
             var cmd = @$"insert into workers(name, phone, specialty, workid) values ('{textBox1.Text}', '{maskedTextBox1.Text}','{textBox2.Text}', '1')";
             Globals.Execute(cmd);
@@ -88,10 +89,11 @@ namespace GigachadRent
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text)) {
-                MessageBox.Show("Введенные данные нельзя добавить в таблицу", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || !maskedTextBox1.MaskCompleted) {
+                MessageBox.Show("Заполните все поля!", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
 
             var cmd = @$"update workers set name = '{textBox1.Text}', phone = '{maskedTextBox1.Text}', specialty = '{textBox2.Text}' where id = '{selectedId}'";
             Globals.Execute(cmd);
@@ -128,6 +130,11 @@ namespace GigachadRent
                 MessageBox.Show("Нельзя ввести число в это поле!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 textBox1.Text = Regex.Replace(textBox1.Text, @"[\d-]", string.Empty);
             }
+        }
+
+        private void справкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new HelpForm().Show();
         }
     }
 }

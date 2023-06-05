@@ -34,7 +34,9 @@ namespace GigachadRent
         {
 
             try {
-                if (Globals.Read($"select * from AppUsers where Login = '{textBox3.Text}' AND Password = '{textBox4.Text}'").Read()) {
+                if (Globals.Read($@"
+declare @afterhash varbinary(500) = HASHBYTES('SHA2_512', '{textBox4.Text}')
+select * from AppUsers where Login = '{textBox3.Text}' AND Password = @afterhash").Read()) {
                     this.Hide();
                     Globals.UserName = textBox3.Text;
                     MessageBox.Show("Вы успешно авторизовались!", "Авторизация", MessageBoxButtons.OK, MessageBoxIcon.Information);

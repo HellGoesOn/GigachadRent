@@ -1,4 +1,6 @@
 ﻿using GigachadRent.Models;
+using Spire.Doc;
+using Spire.Doc.Interface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +16,7 @@ namespace GigachadRent
 {
     public partial class ContractsForm : Form
     {
+        int selectedRowIndex;
         int selectedContractId;
         int selectedWorkerDealId;
         int selectedEquipDealId;
@@ -59,7 +62,7 @@ namespace GigachadRent
         private void DtpStart_TextChanged(object sender, EventArgs e)
         {
             if(contractsGrid.CurrentCell.ColumnIndex == 1)
-            contractsGrid.CurrentCell.Value = dtpStart.Value.ToString();
+            contractsGrid.CurrentCell.Value = dtpStart.Value.ToString("dd-MM-yyyy");
 
             dtpStart.Visible = false;
             dtpStart.Location = new Point(0, 0);
@@ -74,6 +77,9 @@ namespace GigachadRent
 
         public void LoadData()
         {
+            comboBox2.DataSource = Equipment.List.Where(x=>x.Status != "Арендовано" && x.Status != "В ремонте").ToList();
+            comboBox2.DisplayMember = "Composite";
+            comboBox2.ValueMember = "Id";
             var cmd1 = $@"select *, Clients.Name as client_name from Contracts inner join Clients on Contracts.ClientID = Clients.Id";
 
             contractsGrid.Rows.Clear();
@@ -81,7 +87,7 @@ namespace GigachadRent
             while (reader.Read()) {
                 this.contractsGrid.Rows.Add(
                     reader.GetInt32(0),
-                    reader.GetDateTime(1),
+                    reader.GetDateTime(1).ToString("dd-MM-yyyy"),
                     reader.GetInt32(2),
                     reader.GetDecimal(3),
                     reader.GetInt32(4));
@@ -124,6 +130,10 @@ namespace GigachadRent
                     reader2["equip_model"]);
             }
             Globals.CloseConnection();
+
+            comboBox2.DataSource = Equipment.List.Where(x => x.Status != "Арендовано" && x.Status != "В ремонте").ToList();
+            comboBox2.DisplayMember = "Composite";
+            comboBox2.ValueMember = "Id";
         }
         Rectangle _Rectangle;
         private void contractsGrid_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -132,6 +142,7 @@ namespace GigachadRent
                 return;
 
             selectedContractId = (int)contractsGrid.Rows[e.RowIndex].Cells[0].Value;
+            selectedRowIndex = e.RowIndex;
 
             LoadContractData();
 
@@ -143,7 +154,9 @@ namespace GigachadRent
             dtpStart.Visible = false;
             dtpStart.Location = new Point(0, 0);
             dtpStart.Size = new Size(0, 0);
-            dtpStart.Value = DateTime.Parse(contractsGrid.Rows[e.RowIndex].Cells["dateStart"].Value.ToString());
+            dtpStart.Format = DateTimePickerFormat.Custom;
+            dtpStart.CustomFormat = "dd-MM-yyyy";
+            dtpStart.Value = DateTime.ParseExact(contractsGrid.Rows[e.RowIndex].Cells["dateStart"].Value.ToString().Replace("-", "/"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
             dtpStart.TextChanged -= DtpStart_TextChanged;
 
             switch (contractsGrid.Columns[e.ColumnIndex].Name) {
@@ -227,34 +240,21 @@ namespace GigachadRent
             var cmd2 = $@"update equipment set status = 'Арендовано' where id = {(comboBox2.SelectedItem as Equipment).Id}";
             Globals.Execute(cmd2);
             Globals.Log($"{Globals.UserName} добавил технику {(comboBox2.SelectedItem as Equipment).Name} в договор {selectedContractId}");
+            Equipment.List.First(x => x.Id == (comboBox2.SelectedItem as Equipment).Id).Status = "Арендовано";
             LoadContractData();
-            comboBox2.DataSource = Equipment.List;
         }
 
         private void deleteEquipDeals(object sender, EventArgs e)
         {
             if (MessageBox.Show("Вы уверены, что хотите удалить эти данные?", "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Globals.Execute($"DELETE FROM EquipDeals WHERE Id = '{selectedEquipDealId}'");
+                Globals.Execute($"update EquipDeals set Status = 'Свободно' WHERE Id = '{selectedEquipDealId}'");
                 Globals.Log($"{Globals.UserName} удалил технику {(comboBox2.SelectedItem as Equipment).Name} из договора {selectedContractId}");
                 var cmd2 = $@"update equipment set status = 'Свободно' where id = {(comboBox2.SelectedItem as Equipment).Id}";
-                Globals.Execute(cmd2);
+                Globals.Execute(cmd2); 
+                Equipment.List.First(x => x.Id == selectedEquipDealId).Status = "Свободно";
                 LoadContractData();
-                comboBox2.DataSource = Equipment.List;
-            }
-        }
 
-        private void updateContract(object sender, EventArgs e)
-        {
-            try {
-                var cmd = @$"update contracts set datestart = '{dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")}',
-                            dateend = '{contractsGrid.Rows}',
-                            price = '{textBox1.Text}', penalty = '{textBox2.Text}', clientid = '{(comboBox3.SelectedItem as Client).Id}' where Contracts.Id = {selectedContractId} ";
-                Globals.Execute(cmd);
-                Globals.Log($"{Globals.UserName} обновил договор {selectedContractId} с клиентом {(comboBox3.SelectedItem as Client).Name}");
-                LoadData();
-            }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message);
             }
         }
 
@@ -294,7 +294,15 @@ namespace GigachadRent
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
             try {
-                for(int i = 0; i < contractsGrid.Rows.Count - 1; i++) {
+                bool[] alreadyMarkedInLength = new bool[contractsGrid.Rows.Count-1];
+                bool[] alreadyMarkedInPrice= new bool[contractsGrid.Rows.Count-1];
+                if (filterByLength.Checked)
+                    alreadyMarkedInLength = FilterByLength();
+
+                if(filterByPrice.Checked)
+                    alreadyMarkedInPrice = FilterByPrice();
+
+                for (int i = 0; i < contractsGrid.Rows.Count - 1; i++) {
                     bool any = false;
                     bool textNotEmpty = string.IsNullOrWhiteSpace(textBox3.Text);
 
@@ -311,7 +319,9 @@ namespace GigachadRent
                         }
                     }
 
-                    contractsGrid.Rows[i].Visible = any || textNotEmpty;
+                    contractsGrid.Rows[i].Visible = (any || textNotEmpty)
+                        && (!filterByLength.Checked || alreadyMarkedInLength[i])
+                        && (!filterByPrice.Checked || alreadyMarkedInPrice[i]);
                 }
             }
             catch {
@@ -352,13 +362,13 @@ namespace GigachadRent
         {
             try {
                 var rowInd = e.Row.Index-1;
-                contractsGrid.Rows[rowInd].Cells[1].Value = DateTime.Today;
+                contractsGrid.Rows[rowInd].Cells[1].Value = DateTime.Today.ToString("dd-MM-yyyy");
                 contractsGrid.Rows[rowInd].Cells[2].Value = 4;
                 contractsGrid.Rows[rowInd].Cells[3].Value = "0.00";
                 contractsGrid.Rows[rowInd].Cells[4].Value = Client.List[0].Id;
-                string dateStart = Convert.ToDateTime(contractsGrid.Rows[rowInd].Cells[1].Value.ToString()).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string dateStart = DateTime.ParseExact(contractsGrid.Rows[rowInd].Cells[1].Value.ToString().Replace("-", "/"), "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("dd-MM-yyyy");
                 string dateEnd = contractsGrid.Rows[rowInd].Cells[2].Value.ToString();
-                string price = contractsGrid.Rows[rowInd].Cells[3].Value.ToString();
+                string price = contractsGrid.Rows[rowInd].Cells[3].Value.ToString().Replace(".", CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator);
                 int client = (int)contractsGrid.Rows[rowInd].Cells[4].Value;
                 var cmd = @$"insert into contracts(datestart, dateend, price, clientid) 
                            values ('{dateStart}', 
@@ -395,6 +405,13 @@ namespace GigachadRent
                         contractsGrid.CellValueChanged += contractsGrid_CellValueChanged;
                         return;
                     } 
+                    if(yes > 14) {
+                        MessageBox.Show("Длительность аренды должна быть не более 14 дней!", "Слишком большое значение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        contractsGrid.CellValueChanged -= contractsGrid_CellValueChanged;
+                        contractsGrid.Rows[e.RowIndex].Cells[2].Value = 14;
+                        contractsGrid.CellValueChanged += contractsGrid_CellValueChanged;
+                        return;
+                    }
                 } else {
                     MessageBox.Show("Длительность должна быть задана числом", "Неверный тип данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     contractsGrid.CellValueChanged -= contractsGrid_CellValueChanged;
@@ -421,9 +438,9 @@ namespace GigachadRent
 
                 var rowInd = e.RowIndex;
                 selectedContractId = (int)contractsGrid.Rows[e.RowIndex].Cells[0].Value;
-                string dateStart = Convert.ToDateTime(contractsGrid.Rows[rowInd].Cells[1].Value.ToString()).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string dateStart = DateTime.ParseExact(contractsGrid.Rows[rowInd].Cells[1].Value.ToString().Replace("-", "/"), "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("dd-MM-yyyy");
                 string dateEnd = contractsGrid.Rows[rowInd].Cells[2].Value.ToString();
-                string price = contractsGrid.Rows[rowInd].Cells[3].Value.ToString().Replace(".", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
+                string price = contractsGrid.Rows[rowInd].Cells[3].Value.ToString().Replace(".", CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator);
                 int client = (int)contractsGrid.Rows[rowInd].Cells[4].Value;
 
                 var cmd = @$"update contracts set datestart = '{dateStart}',
@@ -473,6 +490,245 @@ namespace GigachadRent
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            new HelpForm().Show();
+        }
+
+        string[] months = new string[]{
+            "января",
+            "февраля",
+            "марта",
+            "апреля",
+            "мая",
+            "июня",
+            "июля",
+            "августа",
+            "сентября",
+            "октября",
+            "ноября",
+            "декабря"
+        };
+
+        private void составитьОтчётToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void актОЗавершенииРаботToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (selectedContractId <= 0)
+                return;
+
+
+            var sum = double.Parse(contractsGrid.Rows[selectedRowIndex].Cells[3].Value.ToString());
+
+            List<string> list = new List<string>();
+            var reader = Globals.Read($"select Equipment.Name, Equipment.Model from EquipDeals inner join Equipment on EquipDeals.EquipId = Equipment.Id where ContractId = {selectedContractId}");
+
+            while (reader.Read()) {
+                var text = reader.GetString(0).ToLower();
+                if (text[text.Length - 1] == 'а') {
+                    text = text.Remove(text.Length - 1);
+                    text += "и";
+                }
+                else if (text[text.Length - 2] == 'о' && text[text.Length - 1] == 'к') {
+                    text = text.Remove(text.Length - 2, 2);
+                    text += "ка";
+                } else if (text[text.Length - 1] == 'с') {
+                    text = text.Remove(text.Length - 2, 2);
+                    text += "са";
+                } else if (text[text.Length - 1] == 'ь') {
+                    text = text.Remove(text.Length - 1, 1);
+                    text += "я";
+                } else {
+                    text += "а";
+                }
+                list.Add($"{text} ({reader.GetString(1)})");
+            };
+
+            if (list.Count <= 0) {
+                MessageBox.Show("Нельзя сформировать договор, так как в него не внесена техника для аренды", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DateTime date = DateTime.ParseExact(contractsGrid.Rows[selectedRowIndex].Cells[1].Value.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            var month = months[date.Month];
+
+
+            Document doc = new Document();
+            doc.LoadFromFile("Reports/jobend.docx");
+            doc.Replace("<numContract>", $"{selectedContractId}", true, true);
+            doc.Replace("<contractDate>", $"{date.Day} {month} {date.Year}", true, true);
+            doc.Replace("<contractClient>", $"{Client.List.First(x => x.Id == (int)contractsGrid.Rows[selectedRowIndex].Cells[4].Value).Name}", true, true);
+            doc.Replace("<totalSum>", $"{sum} руб.", true, true);
+
+            Section section = doc.Sections[0];
+            ITable table = section.Tables[0];
+
+            foreach (string s in list) {
+
+                TableRow row = new TableRow(doc);
+
+                var paragraph1 = row.AddCell().AddParagraph();
+                paragraph1.AppendText($"{table.Rows.Count - 1}");
+                paragraph1.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Center;
+
+                row.AddCell().AddParagraph().AppendText($" Услуги {s}");
+
+                int days = (int)contractsGrid.Rows[selectedRowIndex].Cells[2].Value;
+                var cell = row.AddCell().AddParagraph();
+                cell.AppendText((8*days).ToString());
+                cell.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Center;
+
+                var price = row.AddCell().AddParagraph();
+                price.AppendText($"{Math.Round(sum / list.Count / (8*days), 2)} руб. в час");
+                price.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Center;
+
+                table.Rows.Insert(table.Rows.Count - 1, row);
+            }
+            doc.SaveToFile($"Reports/Акт о завершении договора №{selectedContractId}.docx", FileFormat.Docx);
+            MessageBox.Show("Договор сформирован!", "Уведомление");
+        }
+
+        private void оформитьДоговорОбАрендеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (selectedContractId <= 0)
+                return;
+
+            Document doc = new Document("Reports/jobstart.docx");
+            DateTime date = DateTime.ParseExact(contractsGrid.Rows[selectedRowIndex].Cells[1].Value.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            List<string> list = new List<string>();
+            var r = Globals.Read($"select Equipment.Name, Equipment.Model from EquipDeals inner join Equipment on EquipDeals.EquipId = Equipment.Id where ContractId = {selectedContractId}");
+            while (r.Read())
+                list.Add($"{r.GetString(0)} ({r.GetString(1)})");
+            if (list.Count <= 0) {
+                MessageBox.Show("Нельзя сформировать договор, так как в него не внесена техника для аренды", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string equipments = string.Join(", ", list);
+
+            var reader = Globals.Read($"select Name from Workers inner join WorkerDeals on Workers.Id = WorkerDeals.WorkerId where WorkerDeals.ContractId = {selectedContractId}");
+            string allWorkers = "";
+            while(reader.Read()) {
+                allWorkers += reader.GetString(0) + ", ";
+            }
+
+
+            int days = (int)contractsGrid.Rows[selectedRowIndex].Cells[2].Value;
+
+            doc.Replace("<contractId>", selectedContractId.ToString(), true, true);
+            doc.Replace("<hours>", (days * 8).ToString(), true, true);
+
+            if (!string.IsNullOrWhiteSpace(allWorkers)) {
+                doc.Replace("<pretext>", $"Работник(-и):", true, true);
+                doc.Replace("<workers>", $"{allWorkers}", true, true);
+            } else {
+                doc.Replace("<pretext>", "", true, true);
+                doc.Replace("<workers>", "", true, true);
+            }
+            doc.Replace("<equipment>", equipments, true, true);
+            doc.Replace("<client>", $"{Client.List.First(x => x.Id == (int)contractsGrid.Rows[selectedRowIndex].Cells[4].Value).Name}", true, true);
+
+            ITable table = doc.Sections[0].Tables[0];
+            for(int i =0; i < days; i++) {
+                table.Rows[i+1].Cells[0].LastParagraph.AppendText(date.AddDays(i).ToString("dd.MM.yyyy"));
+                table.Rows[i+1].Cells[3].LastParagraph.AppendText("8");
+            }
+
+            doc.SaveToFile($"Reports/Договор об аренде №{selectedContractId}.docx", FileFormat.Docx);
+            MessageBox.Show("Договор сформирован!", "Уведомление");
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            FilterByLength();
+        }
+
+        private bool[] FilterByLength()
+        {
+            if (filterByLength.Checked) {
+                switch (comboBox4.SelectedIndex) {
+                    case 0:
+                        return Globals.FilterDGV(contractsGrid, (string s) =>
+                        {
+                            bool try1 = int.TryParse(s, out var r);
+                            bool try2 = int.TryParse(textBox4.Text, out var rr);
+                            return try1 && try2 && r > rr;
+                        }, 2);
+                    case 1:
+                        return Globals.FilterDGV(contractsGrid, (string s) =>
+                        {
+                            return int.TryParse(s, out var r)
+                            && int.TryParse(textBox4.Text, out var rr)
+                            && r < rr;
+                        }, 2);
+                    case 2:
+                        return Globals.FilterDGV(contractsGrid, (string s) =>
+                        {
+                            return int.TryParse(s, out var r)
+                            && int.TryParse(textBox4.Text, out var rr)
+                            && r == rr;
+                        }, 2);
+                }
+            }
+
+            return Globals.FilterDGV(contractsGrid, (string s) => { return true; });
+        }
+
+        private bool[] FilterByPrice()
+        {
+            if (filterByPrice.Checked) {
+                switch (comboBox5.SelectedIndex) {
+                    case 0:
+                        return Globals.FilterDGV(contractsGrid, (string s) =>
+                        {
+                            bool try1 = decimal.TryParse(s, out var r);
+                            bool try2 = decimal.TryParse(textBox5.Text, out var rr);
+                            return try1 && try2 && r > rr;
+                        }, 3);
+                    case 1:
+                        return Globals.FilterDGV(contractsGrid, (string s) =>
+                        {
+                            return decimal.TryParse(s, out var r)
+                            && decimal.TryParse(textBox5.Text, out var rr)
+                            && r < rr;
+                        }, 3);
+                    case 2:
+                        return Globals.FilterDGV(contractsGrid, (string s) =>
+                        {
+                            return decimal.TryParse(s, out var r)
+                            && decimal.TryParse(textBox5.Text, out var rr)
+                            && r == rr;
+                        }, 3);
+                }
+            }
+
+            return Globals.FilterDGV(contractsGrid, (string s) => { return true; });
+        }
+
+        private void filterByLength_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterByLength();
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+            FilterByPrice();
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterByPrice();
+        }
+
+        private void filterByPrice_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterByPrice();
         }
     }
 }

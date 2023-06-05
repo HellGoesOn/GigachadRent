@@ -53,11 +53,14 @@ namespace GigachadRent
             var reader3 = Globals.Read(cmd3);
             while (reader3.Read()) {
 
-                int Id = reader3.GetInt32(0);
-                string Name = reader3.GetString(1);
-                string Model = reader3.GetString(2);
+                object[] res = Globals.GetReaderResults(reader3, 4);
 
-                Client.List.Add(new Client() { Id = Id, Name = Name, Phone = Model });
+                int Id = reader3.GetInt32(0);
+                string Name = res[1].ToString();
+                string Model = res[2].ToString();
+                string Email = res[3].ToString();
+
+                Client.List.Add(new Client() { Id = Id, Name = Name, Phone = Model , Email = Email});
             }
             Globals.CloseConnection();
         }
@@ -95,7 +98,8 @@ namespace GigachadRent
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
+            width = this.Width;
+            height = this.Height;
         }
 
         private void showEquipment(object sender, EventArgs e)
@@ -111,6 +115,37 @@ namespace GigachadRent
         private void showSupply(object sender, EventArgs e)
         {
             new SupplyForm().Show();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            new HelpForm().Show();
+        }
+
+        float width, height;
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            /*
+            float percentX = this.Width / width;
+            float percentY = this.Height / height;
+
+            foreach(Control c in this.Controls) {
+                c.Width = (int)(c.Width * percentX);
+                c.Height = (int)(c.Height * percentY);
+
+                if (percentX > 1)
+                    c.Left = (int)(c.Left * percentX);
+                else
+                    c.Left = (int)(c.Left * percentX);
+                
+                if (percentY > 1)
+                    c.Top = c.Top - (int)(c.Height * (1 - percentY));
+                else
+                    c.Top = c.Top + (int)(c.Height * (1 - percentY));
+            }
+
+            width = this.Width;
+            height = this.Height;*/
         }
     }
 }

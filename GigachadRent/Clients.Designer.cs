@@ -32,6 +32,8 @@ namespace GigachadRent
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -45,8 +47,11 @@ namespace GigachadRent
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.email = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.clientBindingSource)).BeginInit();
@@ -67,6 +72,8 @@ namespace GigachadRent
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.textBox2);
+            this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.button2);
@@ -84,9 +91,25 @@ namespace GigachadRent
             this.tabPage1.Text = "Данные";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(7, 119);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(201, 23);
+            this.textBox2.TabIndex = 10;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 101);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(113, 15);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Электронная почта";
+            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(46, 133);
+            this.button4.Location = new System.Drawing.Point(48, 195);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(115, 23);
             this.button4.TabIndex = 8;
@@ -96,7 +119,7 @@ namespace GigachadRent
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(46, 191);
+            this.button3.Location = new System.Drawing.Point(48, 253);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(115, 23);
             this.button3.TabIndex = 7;
@@ -106,7 +129,7 @@ namespace GigachadRent
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(46, 162);
+            this.button2.Location = new System.Drawing.Point(48, 224);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 23);
             this.button2.TabIndex = 6;
@@ -150,7 +173,7 @@ namespace GigachadRent
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(46, 104);
+            this.button1.Location = new System.Drawing.Point(48, 166);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(117, 23);
             this.button1.TabIndex = 0;
@@ -167,7 +190,8 @@ namespace GigachadRent
             this.clientsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
             this.name,
-            this.phone});
+            this.phone,
+            this.email});
             this.clientsGrid.Location = new System.Drawing.Point(226, 49);
             this.clientsGrid.Name = "clientsGrid";
             this.clientsGrid.RowTemplate.Height = 25;
@@ -194,6 +218,11 @@ namespace GigachadRent
             this.phone.HeaderText = "Номер телефона";
             this.phone.Name = "phone";
             // 
+            // email
+            // 
+            this.email.HeaderText = "Электронная почта";
+            this.email.Name = "email";
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -209,12 +238,32 @@ namespace GigachadRent
             this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
             this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.справкаToolStripMenuItem.Text = "Справка";
+            this.справкаToolStripMenuItem.Click += new System.EventHandler(this.справкаToolStripMenuItem_Click);
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(274, 22);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(624, 23);
+            this.textBox3.TabIndex = 4;
+            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(226, 25);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(42, 15);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Поиск";
             // 
             // Clients
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(910, 390);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.textBox3);
             this.Controls.Add(this.clientsGrid);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
@@ -253,5 +302,10 @@ namespace GigachadRent
         private Button button4;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem справкаToolStripMenuItem;
+        private TextBox textBox2;
+        private Label label3;
+        private DataGridViewTextBoxColumn email;
+        private TextBox textBox3;
+        private Label label4;
     }
 }

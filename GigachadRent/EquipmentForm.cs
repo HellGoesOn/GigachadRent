@@ -22,8 +22,8 @@ namespace GigachadRent
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text)) {
-                MessageBox.Show("Введенные данные нельзя добавить в таблицу", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(richTextBox1.Text)) {
+                MessageBox.Show("Заполните все поля!", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -82,6 +82,10 @@ namespace GigachadRent
 
         private void button4_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(richTextBox1.Text)) {
+                MessageBox.Show("Заполните все поля!", "Ошибка ввода данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             var cmd = @$"update Equipment set name = '{textBox1.Text}', model = '{textBox2.Text}', parameters = '{richTextBox1.Text}', status = '{comboBox1.SelectedItem.ToString()}' where Id = '{selectedId}'";
             Globals.Execute(cmd);
             Globals.Log($"{Globals.UserName} обновил данные техники {textBox1.Text}");
@@ -123,6 +127,12 @@ namespace GigachadRent
             catch {
 
             }
+        }
+
+        private void справкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            new HelpForm().Show();
         }
     }
 }
